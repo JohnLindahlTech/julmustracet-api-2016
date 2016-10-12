@@ -1,0 +1,11 @@
+{
+  "loopback-component-explorer": {
+    "mountPath": "/explorer"
+  },
+  "loopback-component-auto-migrate": {
+    "enabled": true,
+    "migration": "auto-migrate",
+    "models": [],
+    "fixtures": "./test/fixtures/"
+  }
+}

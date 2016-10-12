@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "julmustracet"
+  },
+  "AccessToken": {
+    "dataSource": "julmustracet",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "julmustracet",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "julmustracet",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "julmustracet",
+    "public": false
+  },
+  "Brand": {
+    "dataSource": "julmustracet",
+    "public": true
+  },
+  "Drink": {
+    "dataSource": "julmustracet",
+    "public": true
+  },
+  "Player": {
+    "dataSource": "julmustracet",
+    "public": true
+  }
+}

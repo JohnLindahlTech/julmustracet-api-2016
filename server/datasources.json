@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "julmustracet": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "julmustracet",
+    "password": "",
+    "name": "julmustracet",
+    "user": "",
+    "connector": "mongodb"
+  }
+}
