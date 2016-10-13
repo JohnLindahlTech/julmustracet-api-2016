@@ -13,6 +13,9 @@
     "lastName": {
       "type": "string",
       "required": true
+    },
+    "total": {
+      "type": "number"
     }
   },
   "validations": [],
