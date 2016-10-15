@@ -1,6 +1,10 @@
 'use strict';
+const WHITE_LIST_FIELDS = ['total', 'id', 'username', 'daily'];
+
 
 module.exports = function(Player) {
+
+
   Player.disableRemoteMethod('upsert', true);
   Player.disableRemoteMethod('updateAll', true);
 
@@ -16,37 +20,56 @@ module.exports = function(Player) {
   Player.disableRemoteMethod('replaceOrCreate', true);
   Player.disableRemoteMethod('upsertWithWhere', true);
 
-  Player.observe('loaded', function(ctx, next) {
-    if (ctx.instance) {
-      var sum = 0;
-
-      Player.app.models.Drink.find({
-        where: {
-          playerId: ctx.instance.id,
-        },
-        fields: {
-          amount: true,
-        },
-      }, function(err, drinks) {
-        if (err) return next(err);
-
-        if (drinks.length) {
-          drinks.forEach(function(drink) {
-            sum += drink.amount;
-          });
-
-          ctx.instance.total = sum;
-        }
-
-        return next();
-      });
-    } else {
+  Player.observe('loaded', function calculateTotal(ctx, next) {
+    // console.log(ctx);
+    const Drink = Player.app.models.Drink;
+    if (!ctx.instance) {
       return next();
     }
+    var sum = 0;
+    const DRINK_SEARCH = {
+      where: {
+        playerId: ctx.instance.id,
+      },
+      fields: {
+        amount: true,
+      },
+    };
+
+    Drink.find(DRINK_SEARCH, function(err, drinks) {
+      if (err) return next(err);
+      ctx.instance.total = drinks.reduce((result, {amount}) => result + amount, 0);
+      return next();
+    });
+
   });
 
-  Player.observe('access', function(ctx, next) {
-
-    next();
+  Player.afterRemote('find', whiteListData);
+  Player.afterRemote('findOne', whiteListData);
+  Player.afterRemote('findById', function(ctx, modelInstance, next){
+    if(ctx.req.accessToken && ctx.req.accessToken.userId.equals(ctx.result.id)) {
+      next();
+    } else {
+      whiteListData(ctx, modelInstance, next);
+    }
   });
 };
+
+function whiteListData(ctx, modelInstance, next) {
+  if (ctx.result) {
+    if (Array.isArray(modelInstance)) {
+      ctx.result = ctx.result.map(mapResult);
+    } else {
+      ctx.result = mapResult(ctx.result);
+    }
+  }
+  next();
+}
+
+
+function mapResult(result){
+  return WHITE_LIST_FIELDS.reduce((replacement, field) => {
+    replacement[field] = result[field];
+    return replacement;
+  }, {});
+}

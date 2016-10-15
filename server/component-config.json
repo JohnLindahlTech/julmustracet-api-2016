@@ -1,11 +1,11 @@
 {
   "loopback-component-explorer": {
-    "mountPath": "/explorer"
-  },
-  "loopback-component-auto-migrate": {
-    "enabled": true,
-    "migration": "auto-migrate",
-    "models": [],
-    "fixtures": "./test/fixtures/"
+    "mountPath": "/explorer",
+    "apiInfo": {
+      "title": "JulmustRacet API",
+      "description": "This is the API for JulmustRacet",
+      "contact": "info@johnphoto.se",
+      "license": "MIT"
+    }
   }
 }

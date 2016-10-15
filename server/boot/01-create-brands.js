@@ -1,19 +1,22 @@
 'use strict';
+
+const defaultBrands = [
+  { name: 'Harboe' },
+  { name: 'Nygårda' },
+  { name: 'ICA' },
+  { name: 'Coop' },
+  { name: 'Apotekarnes' },
+  { name: 'Zeunerts' },
+  { name: 'Guttsta källa' },
+  { name: 'Three hearts' },
+  { name: 'Nygårdas Ekfatslagrade' },
+  { name: 'Wasa' },
+];
+
 module.exports = function(app) {
   const Brand = app.models.Brand;
-  const defaultBrands = [
-    { name: 'Harboe' },
-    { name: 'Nygårda' },
-    { name: 'ICA' },
-    { name: 'Coop' },
-    { name: 'Apotekarnes' },
-    { name: 'Zeunerts' },
-    { name: 'Guttsta källa' },
-    { name: 'Three hearts' },
-    { name: 'Nygårdas Ekfatslagrade' },
-    { name: 'Wasa' },
-  ];
-  const brandSearchTerm = {};
+
+  console.log('Init Brands Creation.');
   return Brand.find()
   .then(brands => {
     if(brands.length >= defaultBrands.length){
