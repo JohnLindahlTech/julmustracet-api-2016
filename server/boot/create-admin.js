@@ -8,7 +8,7 @@ module.exports = function(app) {
   const RoleMapping = app.models.RoleMapping;
   const Drink = app.models.Drink;
 
-  const defaultPlayer = require('../../admin.json');
+  const defaultPlayer = require('../../config/admin.json');
   const searchPlayerTerm = {where: {email: defaultPlayer.email}, limit: 1};
   const searchRoleTerm = {where: {name: ADMIN}, limit: 1};
   const getSearchPrincipalRoleTerm = (player, role) => ({ where: {and: { roleId: role.id, principalId: player.id} }, limit: 1});
