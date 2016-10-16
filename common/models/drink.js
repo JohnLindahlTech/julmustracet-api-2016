@@ -63,7 +63,7 @@ function updateSaveTotals(ctx, next) {
 
 function updateAllPositions(ctx){
   const Player = ctx.Model.app.models.Player;
-  const Brand = ctx.Model.app.models.Player;
+  const Brand = ctx.Model.app.models.Brand;
   return Promise.all([
     updatePositions(Player),
     updatePositions(Brand)
@@ -88,7 +88,7 @@ function generateDrinkSearch(where){
 }
 
 function updatePositions(Model){
-  Model.find({order:'total DESC'}).then(items => {
+  return Model.find({order:'total DESC'}).then(items => {
     return Promise.all(
       items.map((item, position) =>{
         if(item.position === position + 1){
