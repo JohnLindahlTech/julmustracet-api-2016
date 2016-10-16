@@ -39,7 +39,16 @@ function updateDeleteTotals(ctx, next) {
       const BRANDS_DRINK_SEARCH = generateDrinkSearch({ brandId: brand.id });
       return Drink.find(BRANDS_DRINK_SEARCH, calculateTotal(brand));
     })
-  ]).then(() => next()).catch(next);
+  ])
+  .then(()=> {
+    const Player = ctx.Model.app.models.Player;
+    const Brand = ctx.Model.app.models.Player;
+    return Promise.all([
+      updatePositions(Player),
+      updatePositions(Brand)
+    ]);
+  })
+  .then(() => next()).catch(next);
 }
 
 
@@ -55,7 +64,16 @@ function updateSaveTotals(ctx, next) {
   Promise.all([
     Drink.find(PLAYER_DRINK_SEARCH, calculateTotal(player)),
     Drink.find(BRANDS_DRINK_SEARCH, calculateTotal(brand))
-  ]).then(() => next()).catch(next);
+  ])
+  .then(()=> {
+    const Player = ctx.Model.app.models.Player;
+    const Brand = ctx.Model.app.models.Player;
+    return Promise.all([
+      updatePositions(Player),
+      updatePositions(Brand)
+    ]);
+  })
+  .then(() => next()).catch(next);
 }
 
 function calculateTotal(model){
@@ -73,4 +91,19 @@ function generateDrinkSearch(where){
       amount: true,
     }
   };
+}
+
+function updatePositions(Model){
+  Model.find({order:'total DESC'}).then(items => {
+    return Promise.all(
+      items.map((item, position) =>{
+        if(item.position === position + 1){
+          return Promise.resolve(item);
+        } else {
+          item.position = position + 1;
+          return item.save();
+        }
+      })
+    )
+  })
 }

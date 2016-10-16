@@ -24,6 +24,9 @@
     }
   },
   "validations": [],
+  "scope":{
+    "order": "total DESC"
+  },
   "relations": {
     "drinks": {
       "type": "hasMany",

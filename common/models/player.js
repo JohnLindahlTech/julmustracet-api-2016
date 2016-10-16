@@ -19,9 +19,9 @@ module.exports = function(Player) {
 
   Player.observe('after save', connectPlayerToRole);
   Player.afterRemote('**', whiteListPlayer);
-  Player.afterRemote('login', attachRole);
+  Player.afterRemote('login', attachRoleToLogin);
 
-  function attachRole(ctx, instance, next){
+  function attachRoleToLogin(ctx, instance, next){
     // TODO Working code but it just wont expose the data in the actual REST-response.
     const Role = Player.app.models.Role;
     const RoleMapping = Player.app.models.RoleMapping;

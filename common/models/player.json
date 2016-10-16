@@ -27,6 +27,9 @@
       "default": 0
     }
   },
+  "scope":{
+    "order": "position ASC"
+  },
   "validations": [],
   "relations": {
     "drinks": {

@@ -1,4 +1,4 @@
-const WHITE_LIST_FIELDS = ['total', 'id', 'username', 'daily'];
+const WHITE_LIST_FIELDS = ['total', 'id', 'username', 'daily', 'position'];
 
 module.exports = function whiteListData(ctx, modelInstance, next) {
   if(!ctx.result || isLoggedInUser(ctx)){
