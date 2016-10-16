@@ -13,6 +13,14 @@
     "total": {
       "type": "number",
       "default": 0
+    },
+    "daily": {
+      "type": "number",
+      "default": 0
+    },
+    "position": {
+      "type": "number",
+      "default": 0
     }
   },
   "validations": [],

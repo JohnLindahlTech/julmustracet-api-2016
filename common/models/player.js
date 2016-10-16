@@ -1,10 +1,7 @@
 'use strict';
-const WHITE_LIST_FIELDS = ['total', 'id', 'username', 'daily'];
-
-
+const whiteListPlayer = require('../helpers/whiteListPlayer');
+const USER = 'user';
 module.exports = function(Player) {
-
-
   Player.disableRemoteMethod('upsert', true);
   Player.disableRemoteMethod('updateAll', true);
 
@@ -16,60 +13,49 @@ module.exports = function(Player) {
   Player.disableRemoteMethod('__get__accessTokens', false);
   Player.disableRemoteMethod('__updateById__accessTokens', false);
 
-  Player.disableRemoteMethod('createChangeStream', true); // MIGHT BE NICE if it is basicakky WebSockets.
+  Player.disableRemoteMethod('createChangeStream', true);
   Player.disableRemoteMethod('replaceOrCreate', true);
   Player.disableRemoteMethod('upsertWithWhere', true);
 
-  Player.observe('loaded', function calculateTotal(ctx, next) {
-    // console.log(ctx);
-    const Drink = Player.app.models.Drink;
-    if (!ctx.instance) {
-      return next();
-    }
-    var sum = 0;
-    const DRINK_SEARCH = {
+  Player.observe('after save', connectPlayerToRole);
+  Player.afterRemote('**', whiteListPlayer);
+  Player.afterRemote('login', attachRole);
+
+  function attachRole(ctx, instance, next){
+    // TODO Working code but it just wont expose the data in the actual REST-response.
+    const Role = Player.app.models.Role;
+    const RoleMapping = Player.app.models.RoleMapping;
+    RoleMapping.find({
+      fields: {roleId:true},
       where: {
-        playerId: ctx.instance.id,
-      },
-      fields: {
-        amount: true,
-      },
-    };
-
-    Drink.find(DRINK_SEARCH, function(err, drinks) {
-      if (err) return next(err);
-      ctx.instance.total = drinks.reduce((result, {amount}) => result + amount, 0);
-      return next();
-    });
-
-  });
-
-  Player.afterRemote('find', whiteListData);
-  Player.afterRemote('findOne', whiteListData);
-  Player.afterRemote('findById', function(ctx, modelInstance, next){
-    if(ctx.req.accessToken && ctx.req.accessToken.userId.equals(ctx.result.id)) {
-      next();
-    } else {
-      whiteListData(ctx, modelInstance, next);
-    }
-  });
+        and:[
+          { principalType: RoleMapping.USER },
+          { principalId: instance.userId }
+        ]
+      }
+    })
+    .then(maps => {
+      return Role.find({fields:{name:true, id:true}, where: {or: maps.map(({roleId}) => ({id:roleId}))}}).then(roles => {
+        instance.roles = roles;
+      });
+    })
+    .then(() => next())
+  }
 };
 
-function whiteListData(ctx, modelInstance, next) {
-  if (ctx.result) {
-    if (Array.isArray(modelInstance)) {
-      ctx.result = ctx.result.map(mapResult);
-    } else {
-      ctx.result = mapResult(ctx.result);
-    }
+function connectPlayerToRole(ctx, next){
+  const Role = ctx.Model.app.models.Role;
+  const RoleMapping = ctx.Model.app.models.RoleMapping;
+
+  if(typeof ctx.isNewInstance === 'boolean' && ctx.isNewInstance){
+    return Role.find({ where: { name: USER }, limit: 1 }).then(([userRole]) => {
+      return userRole.principals.create({
+        principalType: RoleMapping.USER,
+        principalId: ctx.instance.id,
+      });
+    })
+    .then(()=>next())
+    .catch(next);
   }
   next();
-}
-
-
-function mapResult(result){
-  return WHITE_LIST_FIELDS.reduce((replacement, field) => {
-    replacement[field] = result[field];
-    return replacement;
-  }, {});
 }
