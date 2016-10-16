@@ -40,17 +40,9 @@ function updateDeleteTotals(ctx, next) {
       return Drink.find(BRANDS_DRINK_SEARCH, calculateTotal(brand));
     })
   ])
-  .then(()=> {
-    const Player = ctx.Model.app.models.Player;
-    const Brand = ctx.Model.app.models.Player;
-    return Promise.all([
-      updatePositions(Player),
-      updatePositions(Brand)
-    ]);
-  })
+  .then(()=> updateAllPositions(ctx))
   .then(() => next()).catch(next);
 }
-
 
 function updateSaveTotals(ctx, next) {
   const Drink = ctx.Model;
@@ -65,15 +57,17 @@ function updateSaveTotals(ctx, next) {
     Drink.find(PLAYER_DRINK_SEARCH, calculateTotal(player)),
     Drink.find(BRANDS_DRINK_SEARCH, calculateTotal(brand))
   ])
-  .then(()=> {
-    const Player = ctx.Model.app.models.Player;
-    const Brand = ctx.Model.app.models.Player;
-    return Promise.all([
-      updatePositions(Player),
-      updatePositions(Brand)
-    ]);
-  })
+  .then(()=> updateAllPositions(ctx))
   .then(() => next()).catch(next);
+}
+
+function updateAllPositions(ctx){
+  const Player = ctx.Model.app.models.Player;
+  const Brand = ctx.Model.app.models.Player;
+  return Promise.all([
+    updatePositions(Player),
+    updatePositions(Brand)
+  ]);
 }
 
 function calculateTotal(model){
