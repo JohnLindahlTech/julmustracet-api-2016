@@ -1,13 +1,26 @@
 'use strict';
-
+const fs = require('fs');
+const path = require('path');
 const ADMIN = 'admin';
+
+const adminPath = '../../config/admin.json';
+const absoluteAdminPath = path.join(__dirname, adminPath);
 
 module.exports = function(app, callback) {
   const Player = app.models.Player;
   const Role = app.models.Role;
   const RoleMapping = app.models.RoleMapping;
-
-  const defaultPlayer = require('../../config/admin.json');
+  if(!checkFileLocation(absoluteAdminPath)){
+    const exampleAdmin = {
+        username: "admin",
+        email: "admin@example.com",
+        firstName: "Ad",
+        lastName: "Min",
+        password: "admin"
+      };
+    throw new Error(`Create an admin user JSON at ${absoluteAdminPath}\n Example:\n ${JSON.stringify(exampleAdmin, null, 2)}`);
+  }
+  const defaultPlayer = require(adminPath);
   const searchPlayerTerm = {where: {email: defaultPlayer.email}, limit: 1};
   const searchRoleTerm = {where: {name: ADMIN}, limit: 1};
   const getSearchPrincipalRoleTerm = (player, role) => ({ where: {and: { roleId: role.id, principalId: player.id} }, limit: 1});
@@ -48,4 +61,12 @@ function promisify(fn){
       resolve(data);
     });
   });
+}
+
+function checkFileLocation(path){
+  try{
+    return !!fs.statSync(path);
+  }catch(e){
+    return false;
+  }
 }
