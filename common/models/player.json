@@ -6,14 +6,6 @@
     "validateUpsert": true
   },
   "properties": {
-    "firstName": {
-      "type": "string",
-      "required": true
-    },
-    "lastName": {
-      "type": "string",
-      "required": true
-    },
     "total": {
       "type": "number",
       "default": 0
@@ -27,6 +19,7 @@
       "default": 0
     }
   },
+  "protected": ["email"],
   "scope":{
     "order": "position ASC"
   },
