@@ -21,6 +21,14 @@ function customValidate(evalFn) {
   };
 }
 
+function doesBrandNotExist(drink) {
+  return !drink.brand && !drink.brandId;
+}
+
+function doesPlayerNotExist(drink) {
+  return !drink.player && !drink.player;
+}
+
 function amountLessThanMin(drink) {
   return drink.amount < minAmount;
 }
@@ -115,7 +123,8 @@ module.exports = (Drink) => {
   });
 
   Drink.validatesLengthOf('brand', { max: 100 });
-
+  Drink.validate('brand', customValidate(doesBrandNotExist));
+  Drink.validate('player', customValidate(doesPlayerNotExist));
   Drink.validate('amount', customValidate(amountLessThanMin));
   Drink.validate('amount', customValidate(amountMoreThanMax));
   Drink.validate('date', customValidate(dateLessThanStart));

@@ -71,5 +71,7 @@ module.exports = (Player) => {
   Player.observe('before save', ctx => updateTotal(ctx));
   Player.observe('after save', updatePositions);
 
-  Player.afterRemote('**', calculateDaily);
+  Player.afterRemote('find', calculateDaily);
+  Player.afterRemote('findOne', calculateDaily);
+  Player.afterRemote('findById', calculateDaily);
 };

@@ -30,8 +30,7 @@
   "relations": {
     "drinks": {
       "type": "hasMany",
-      "model": "Drink",
-      "foreignKey": ""
+      "model": "Drink"
     }
   },
   "acls": [

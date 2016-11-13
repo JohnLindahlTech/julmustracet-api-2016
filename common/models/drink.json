@@ -20,13 +20,11 @@
   "relations": {
     "brand": {
       "type": "belongsTo",
-      "model": "Brand",
-      "foreignKey": ""
+      "model": "Brand"
     },
     "player": {
       "type": "belongsTo",
-      "model": "Player",
-      "foreignKey": ""
+      "model": "Player"
     }
   },
   "acls": [

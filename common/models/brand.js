@@ -21,5 +21,7 @@ module.exports = (Brand) => {
   Brand.observe('before save', updateTotal);
 
   Brand.observe('after save', updatePositions);
-  Brand.afterRemote('**', calculateDaily);
+  Brand.afterRemote('find', calculateDaily);
+  Brand.afterRemote('findOne', calculateDaily);
+  Brand.afterRemote('findById', calculateDaily);
 };
