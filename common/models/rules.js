@@ -1,15 +1,16 @@
-'use strict';
+
+
 const { disableAllExcept } = require('../helpers/disableMethods');
 const app = require('../../server/server');
-module.exports = function(Rules) {
+
+function find(filter, cb) {
+  return cb(null, app.get('rules'));
+}
+
+module.exports = function (Rules) {
   disableAllExcept(Rules, ['find']);
 
   Rules.once('attached', () => {
-    Rules.find = find;
-  })
-
+    Rules.find = find; // eslint-disable-line no-param-reassign
+  });
 };
-
-function find(filter, cb) {
-   return cb(null, app.get('rules'));
-}

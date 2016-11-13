@@ -1,9 +1,8 @@
-'use strict';
 
-const { generateDrinkSearch, calculateTotal } = require('../helpers');
 
-module.exports = function(Brand) {
+const { updateInstance } = require('../helpers');
 
+module.exports = function (Brand) {
   Brand.disableRemoteMethod('upsert', true);
   Brand.disableRemoteMethod('updateAll', true);
 
@@ -16,24 +15,8 @@ module.exports = function(Brand) {
   Brand.disableRemoteMethod('replaceOrCreate', true);
   Brand.disableRemoteMethod('upsertWithWhere', true);
   Brand.disableRemoteMethod('createChangeStream', true);
-  Brand.validatesLengthOf('name', {max: 100});
+  Brand.validatesLengthOf('name', { max: 100 });
   Brand.validatesUniquenessOf('name');
 
-  Brand.observe('before save', beforeSave);
-
-  function beforeSave(ctx) {
-    if(ctx.instance) {
-      return updateTotal(ctx.instance, ctx.instance);
-    } else {
-      return updateTotal(ctx.data, ctx.currentInstance);
-    }
-  }
-
-  function updateTotal(instance, reference) {
-    return reference.drinks.getAsync()
-    .then(calculateTotal)
-    .then(total => {
-      instance.total = total;
-    });
-  }
-}
+  Brand.observe('before save', updateInstance);
+};

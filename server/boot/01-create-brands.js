@@ -1,4 +1,4 @@
-'use strict';
+
 
 const defaultBrands = [
   { name: 'Harboe' },
@@ -13,13 +13,13 @@ const defaultBrands = [
   { name: 'Wasa' },
 ];
 
-module.exports = function(app) {
+module.exports = (app) => {
   const Brand = app.models.Brand;
 
   console.log('Init Brands Creation.');
   return Brand.find()
-  .then(brands => {
-    if(brands.length >= defaultBrands.length){
+  .then((brands) => {
+    if (brands.length >= defaultBrands.length) {
       console.info('Brands already exists');
       return brands;
     }

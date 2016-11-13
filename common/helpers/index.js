@@ -1,8 +1,8 @@
 const calculateTotal = require('./calculateTotal');
-const { disableAllExcept, disableOnlyTheseMethods} = require('./disableMethods');
+const { disableAllExcept, disableOnlyTheseMethods } = require('./disableMethods');
 const updatePositions = require('./updatePositions');
 const whiteListPlayer = require('./whiteListPlayer');
-const generateDrinkSearch = require('./generateDrinkSearch');
+const updateInstance = require('./updateInstance');
 
 module.exports = {
   calculateTotal,
@@ -10,5 +10,5 @@ module.exports = {
   disableOnlyTheseMethods,
   updatePositions,
   whiteListPlayer,
-  generateDrinkSearch
-}
+  updateInstance,
+};
