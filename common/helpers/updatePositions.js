@@ -1,10 +1,13 @@
-module.exports = function updatePositions(Model) {
-  return Model.find({ order: 'total DESC' }).then(items => Promise.all(
+module.exports = function updatePositions(ctx) {
+  if (ctx.hookState.totalUntouched) {
+    return Promise.resolve(true);
+  }
+  return ctx.Model.find({ order: 'total DESC' }).then(items => Promise.all(
       items.map((item, position) => {
         if (item.position === position + 1) {
           return Promise.resolve(item);
         }
-        item.position = position + 1; // eslint-disable-line no-param-reassign
+        Object.assign(item, { position: position + 1 });
         return item.save();
       })));
 };

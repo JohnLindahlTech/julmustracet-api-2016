@@ -1,6 +1,4 @@
-
-
-const { whiteListPlayer, updateInstance } = require('../helpers');
+const { whiteListPlayer, updateTotal, updatePositions, calculateDaily } = require('../helpers');
 
 const USER = 'user';
 
@@ -70,5 +68,8 @@ module.exports = (Player) => {
   Player.validatesLengthOf('email', { max: 100 });
   // Player.validatesLengthOf('password', {min: 6}); // TODO It seems like it is not possible to check length of password. https://github.com/strongloop/loopback/issues/251
 
-  Player.observe('before save', updateInstance);
+  Player.observe('before save', ctx => updateTotal(ctx));
+  Player.observe('after save', updatePositions);
+
+  Player.afterRemote('**', calculateDaily);
 };

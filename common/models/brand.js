@@ -1,8 +1,8 @@
 
 
-const { updateInstance } = require('../helpers');
+const { updateTotal, updatePositions, calculateDaily } = require('../helpers');
 
-module.exports = function (Brand) {
+module.exports = (Brand) => {
   Brand.disableRemoteMethod('upsert', true);
   Brand.disableRemoteMethod('updateAll', true);
 
@@ -18,5 +18,8 @@ module.exports = function (Brand) {
   Brand.validatesLengthOf('name', { max: 100 });
   Brand.validatesUniquenessOf('name');
 
-  Brand.observe('before save', updateInstance);
+  Brand.observe('before save', updateTotal);
+
+  Brand.observe('after save', updatePositions);
+  Brand.afterRemote('**', calculateDaily);
 };

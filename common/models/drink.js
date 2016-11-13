@@ -94,7 +94,8 @@ module.exports = (Drink) => {
   Drink.once('attached', () => {
     const { Brand } = Drink.app.models;
     const origCreate = Drink.create.bind(Drink);
-    Drink.create = (rawDrink, options, done) => { // eslint-disable-line no-param-reassign
+
+    function create(rawDrink, options, done) {
       if (!rawDrink.brandId && rawDrink.brand) {
         return Brand.find({ where: { name: rawDrink.brand }, limit: 1 })
           .then(([brand]) => {
@@ -108,7 +109,9 @@ module.exports = (Drink) => {
           .catch(done);
       }
       return origCreate(rawDrink, options, done);
-    };
+    }
+
+    Object.assign(Drink, { create });
   });
 
   Drink.validatesLengthOf('brand', { max: 100 });

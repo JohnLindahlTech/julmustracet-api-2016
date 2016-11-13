@@ -11,6 +11,6 @@ module.exports = function (Rules) {
   disableAllExcept(Rules, ['find']);
 
   Rules.once('attached', () => {
-    Rules.find = find; // eslint-disable-line no-param-reassign
+    Object.assign(Rules, { find });
   });
 };
