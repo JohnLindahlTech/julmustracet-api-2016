@@ -5,6 +5,9 @@
   "options": {
     "validateUpsert": true
   },
+  "scope": {
+    "order": "total DESC"
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -24,9 +27,6 @@
     }
   },
   "validations": [],
-  "scope":{
-    "order": "total DESC"
-  },
   "relations": {
     "drinks": {
       "type": "hasMany",

@@ -5,6 +5,12 @@
   "options": {
     "validateUpsert": true
   },
+  "protected": [
+    "email"
+  ],
+  "scope": {
+    "order": "position ASC"
+  },
   "properties": {
     "total": {
       "type": "number",
@@ -18,10 +24,6 @@
       "type": "number",
       "default": 0
     }
-  },
-  "protected": ["email"],
-  "scope":{
-    "order": "position ASC"
   },
   "validations": [],
   "relations": {

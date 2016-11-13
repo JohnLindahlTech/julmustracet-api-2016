@@ -30,7 +30,8 @@ module.exports = function(app, callback) {
   return Promise.all([
     Player.find(searchPlayerTerm),
     Role.find(searchRoleTerm)
-  ]).then(([players, roles]) =>{
+  ])
+  .then(([players, roles]) =>{
     if(!roles.length){
       throw new Error('No Admin Role, Please fix');
     }
@@ -39,6 +40,7 @@ module.exports = function(app, callback) {
       return players[0];
     }
     return Player.create(defaultPlayer)
+
       .then(admin => ({ admin, role: roles[0] }))
       .then(({admin, role}) =>{
         return role.principals.create({
@@ -51,8 +53,11 @@ module.exports = function(app, callback) {
     console.log('Admin Ready: ', admin.username);
   })
   .catch(console.error.bind(console))
+
   .then(() => callback());
 };
+
+
 
 function promisify(fn){
   return new Promise((resolve, reject) => {

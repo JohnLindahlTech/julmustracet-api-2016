@@ -19,5 +19,12 @@
     "cors": false,
     "handleErrors": false
   },
-  "legacyExplorer": false
+  "legacyExplorer": false,
+  "rules": {
+    "startDate": "2016-10-31T23:00:00.000Z",
+    "endDate": "2016-12-20T22:59:59.000Z",
+    "year": 2016,
+    "maxAmount": 1.5,
+    "minAmount": 0
+  }
 }

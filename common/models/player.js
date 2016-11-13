@@ -1,5 +1,6 @@
 'use strict';
-const whiteListPlayer = require('../helpers/whiteListPlayer');
+const { whiteListPlayer, calculateTotal, updatePositions } = require('../helpers');
+
 const USER = 'user';
 module.exports = function(Player) {
   Player.disableRemoteMethod('upsert', true);
@@ -21,11 +22,34 @@ module.exports = function(Player) {
   Player.afterRemote('**', whiteListPlayer);
   Player.afterRemote('login', attachRoleToLogin);
 
+
+  Player.validatesLengthOf('username', {max: 100});
+  Player.validatesLengthOf('email', {max: 100});
+  // Player.validatesLengthOf('password', {min: 6}); // TODO It seems like it is not possible to check length of password. https://github.com/strongloop/loopback/issues/251
+
+  Player.observe('before save', beforeSave);
+
+  function beforeSave(ctx) {
+    if(ctx.instance) {
+      return updateTotal(ctx.instance, ctx.instance);
+    } else {
+      return updateTotal(ctx.data, ctx.currentInstance);
+    }
+  }
+
+  function updateTotal(instance, reference) {
+    return reference.drinks.getAsync()
+    .then(calculateTotal)
+    .then(total => {
+      instance.total = total;
+    });
+  }
+
   function attachRoleToLogin(ctx, instance, next){
     // TODO Working code but it just wont expose the data in the actual REST-response.
     const Role = Player.app.models.Role;
     const RoleMapping = Player.app.models.RoleMapping;
-    RoleMapping.find({
+    return RoleMapping.find({
       fields: {roleId:true},
       where: {
         and:[
@@ -54,8 +78,9 @@ function connectPlayerToRole(ctx, next){
         principalId: ctx.instance.id,
       });
     })
-    .then(()=>next())
+    .then(() => next())
     .catch(next);
+  } else {
+    next();
   }
-  next();
 }
