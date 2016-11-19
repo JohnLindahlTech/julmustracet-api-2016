@@ -8,8 +8,7 @@
   "properties": {
     "amount": {
       "type": "number",
-      "required": true,
-      "default": 0
+      "required": true
     },
     "date": {
       "type": "date",

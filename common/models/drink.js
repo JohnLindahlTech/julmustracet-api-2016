@@ -11,22 +11,17 @@ const end = new Date(endDate);
 
 
 function touchInstance(instance) {
-  instance.touched = new Date();  // eslint-disable-line no-param-reassign
-  return instance.save();
+  if (instance) {
+    instance.touched = new Date();  // eslint-disable-line no-param-reassign
+    return instance.save();
+  }
+  return Promise.resolve(true);
 }
 
 function customValidate(evalFn) {
   return function evaluateComparison(err) {
     if (evalFn(this)) err();
   };
-}
-
-function doesBrandNotExist(drink) {
-  return !drink.brand && !drink.brandId;
-}
-
-function doesPlayerNotExist(drink) {
-  return !drink.player && !drink.player;
 }
 
 function amountLessThanMin(drink) {
@@ -38,6 +33,9 @@ function amountMoreThanMax(drink) {
 }
 
 function dateLessThanStart(drink) {
+  if (!drink.date) {
+    return false;
+  }
   return drink.date.getTime() < start.getTime();
 }
 
@@ -46,6 +44,9 @@ function getEarliestDate(...dates) {
 }
 
 function dateMoreThanEndOrCurrent(drink) {
+  if (!drink.date) {
+    return false;
+  }
   const maxDate = getEarliestDate(new Date(), end);
   return drink.date.getTime() > maxDate.getTime();
 }
@@ -122,9 +123,9 @@ module.exports = (Drink) => {
     Object.assign(Drink, { create });
   });
 
-  Drink.validatesLengthOf('brand', { max: 100 });
-  Drink.validate('brand', customValidate(doesBrandNotExist));
-  Drink.validate('player', customValidate(doesPlayerNotExist));
+  Drink.validatesPresenceOf('brandId', 'playerId', 'date');
+  Drink.validatesLengthOf('brand', { max: 100, min: 1 });
+  Drink.validatesNumericalityOf('amount');
   Drink.validate('amount', customValidate(amountLessThanMin));
   Drink.validate('amount', customValidate(amountMoreThanMax));
   Drink.validate('date', customValidate(dateLessThanStart));
