@@ -1,4 +1,4 @@
-const { whiteListPlayer, updateTotal, updatePositions, calculateDaily } = require('../helpers');
+const { updateTotal, updatePositions, calculateDaily } = require('../helpers');
 
 const USER = 'user';
 
@@ -60,7 +60,6 @@ module.exports = (Player) => {
   Player.disableRemoteMethod('upsertWithWhere', true);
 
   Player.observe('after save', connectPlayerToRole);
-  Player.afterRemote('**', whiteListPlayer);
   Player.afterRemote('login', attachRoleToLogin);
 
 

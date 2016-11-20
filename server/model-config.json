@@ -40,9 +40,5 @@
   "Player": {
     "dataSource": "julmustracet",
     "public": true
-  },
-  "Rules": {
-    "dataSource": "db",
-    "public": true
   }
 }

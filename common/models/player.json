@@ -5,12 +5,16 @@
   "options": {
     "validateUpsert": true
   },
-  "protected": [
-    "email"
-  ],
   "scope": {
     "order": "position ASC"
   },
+  "hidden": [
+    "email"
+  ],
+  "protected": [
+    "email"
+  ],
+
   "properties": {
     "total": {
       "type": "number",
@@ -24,9 +28,7 @@
       "type": "number",
       "default": 0
     }
-
   },
-  "validations": [],
   "relations": {
     "drinks": {
       "type": "hasMany",
