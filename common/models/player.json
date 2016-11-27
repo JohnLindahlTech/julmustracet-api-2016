@@ -14,7 +14,6 @@
   "protected": [
     "email"
   ],
-
   "properties": {
     "total": {
       "type": "number",
@@ -29,6 +28,7 @@
       "default": 0
     }
   },
+  "validations": [],
   "relations": {
     "drinks": {
       "type": "hasMany",

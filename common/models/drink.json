@@ -15,6 +15,7 @@
       "required": true
     }
   },
+  "validations": [],
   "relations": {
     "brand": {
       "type": "belongsTo",

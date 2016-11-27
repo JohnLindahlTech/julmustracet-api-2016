@@ -1,0 +1,36 @@
+{
+  "name": "Rules",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "startDate": {
+      "type": "date",
+      "required": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true
+    },
+    "year": {
+      "type": "number",
+      "required": true
+    },
+    "maxAmount": {
+      "type": "number",
+      "required": true,
+      "default": 1.5
+    },
+    "minAmount": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -26,6 +26,7 @@
       "default": 0
     }
   },
+  "validations": [],
   "relations": {
     "drinks": {
       "type": "hasMany",
